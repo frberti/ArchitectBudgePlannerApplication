@@ -1,8 +1,10 @@
 package br.com.architectbudgeplanner.service
 
 import br.com.architectbudgeplanner.dto.ClassCategoryForm
+import br.com.architectbudgeplanner.dto.ClassCategoryUpdateForm
 import br.com.architectbudgeplanner.dto.ClassCategoryView
 import br.com.architectbudgeplanner.model.ClassCategory
+import br.com.architectbudgeplanner.utils.ClassCategoryUpdateUtils
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -10,7 +12,8 @@ import java.util.stream.Collectors
 class ClassCategoryService(
     private var list: MutableList<ClassCategory>,
     private val classCategoryViewMapper: ClassCategoryViewMapper,
-    private val classCategoryFormMapper: ClassCategoryFormMapper
+    private val classCategoryFormMapper: ClassCategoryFormMapper,
+    private val utils: ClassCategoryUpdateUtils
 ) {
 
     init {
@@ -35,4 +38,14 @@ class ClassCategoryService(
         classCategory.id = list.size.toLong() + 1
         list.add(classCategory)
     }
+
+    fun updateClass(form: ClassCategoryUpdateForm) {
+        utils.updateList(form, list)
+    }
+
+    fun deleteClass(id: Long) {
+        list.removeIf { it.id == id }
+    }
+
+
 }

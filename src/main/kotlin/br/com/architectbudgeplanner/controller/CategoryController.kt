@@ -1,6 +1,7 @@
 package br.com.architectbudgeplanner.controller
 
 import br.com.architectbudgeplanner.dto.CategoryForm
+import br.com.architectbudgeplanner.dto.CategoryUpdateForm
 import br.com.architectbudgeplanner.dto.CategoryView
 import br.com.architectbudgeplanner.model.Category
 import br.com.architectbudgeplanner.service.CategoryService
@@ -25,6 +26,16 @@ class CategoryController(private val service: CategoryService) {
     @PostMapping
     fun addCategory(@RequestBody @Valid category: CategoryForm) {
         service.addCategory(category)
+    }
+
+    @PutMapping
+    fun updateCategory(@RequestBody @Valid category: CategoryUpdateForm) {
+        service.updateCategory(category)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteCategory(@PathVariable id: Long) {
+        service.deleteCategory(id)
     }
 
 }
