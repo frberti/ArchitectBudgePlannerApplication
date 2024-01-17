@@ -3,6 +3,7 @@ package br.com.architectbudgeplanner.service
 import br.com.architectbudgeplanner.dto.ClassCategoryForm
 import br.com.architectbudgeplanner.dto.ClassCategoryUpdateForm
 import br.com.architectbudgeplanner.dto.ClassCategoryView
+import br.com.architectbudgeplanner.mocks.getClassesMock
 import br.com.architectbudgeplanner.model.ClassCategory
 import br.com.architectbudgeplanner.utils.ClassCategoryUpdateUtils
 import org.springframework.stereotype.Service
@@ -33,14 +34,18 @@ class ClassCategoryService(
         return classCategoryViewMapper.map(classCategory)
     }
 
-    fun addClass(dto: ClassCategoryForm) {
-        val classCategory = classCategoryFormMapper.map(dto)
+    fun addClass(form: ClassCategoryForm) : ClassCategoryView {
+        val classCategory = classCategoryFormMapper.map(form)
         classCategory.id = list.size.toLong() + 1
         list.add(classCategory)
+        return classCategoryViewMapper.map(classCategory)
     }
 
-    fun updateClass(form: ClassCategoryUpdateForm) {
-        utils.updateList(form, list)
+    fun updateClass(form: ClassCategoryUpdateForm) : ClassCategoryView? {
+        val classCategory = utils.updateList(form, list)
+        return classCategory?.let {
+            classCategoryViewMapper.map(classCategory)
+        }
     }
 
     fun deleteClass(id: Long) {

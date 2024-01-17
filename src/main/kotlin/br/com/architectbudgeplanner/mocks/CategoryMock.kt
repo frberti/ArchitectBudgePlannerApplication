@@ -1,4 +1,4 @@
-package br.com.architectbudgeplanner.service
+package br.com.architectbudgeplanner.mocks
 
 import br.com.architectbudgeplanner.model.CategorizedItemComposition
 import br.com.architectbudgeplanner.model.Category

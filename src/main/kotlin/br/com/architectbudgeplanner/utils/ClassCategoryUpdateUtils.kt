@@ -7,20 +7,21 @@ import org.springframework.stereotype.Component
 @Component
 class ClassCategoryUpdateUtils: Utils<ClassCategoryUpdateForm, ClassCategory> {
 
-    override fun updateList(form: ClassCategoryUpdateForm, list: MutableList<ClassCategory>) {
+    override fun updateList(form: ClassCategoryUpdateForm, list: MutableList<ClassCategory>): ClassCategory? {
 
         val classCategory = list.firstOrNull { it.id == form.id }
 
         classCategory?.let {
             list.remove(it)
-            list.add(
-                ClassCategory(
-                    id = it.id,
-                    description = form.description,
-                    acronym = form.acronym
-                )
+            val classUpdated = ClassCategory(
+                id = it.id,
+                description = form.description,
+                acronym = form.acronym
             )
+            list.add(classUpdated)
+            return classUpdated
         }
+        return null
     }
 
 }

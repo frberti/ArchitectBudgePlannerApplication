@@ -5,6 +5,7 @@ import br.com.architectbudgeplanner.dto.CategorizedItemCompositionUpdateForm
 import br.com.architectbudgeplanner.dto.CategorizedItemCompositionView
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionFormMapper
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionViewMapper
+import br.com.architectbudgeplanner.mocks.getItensMock
 import br.com.architectbudgeplanner.model.CategorizedItemComposition
 import br.com.architectbudgeplanner.utils.CategorizedItemCompositionUpdateUtils
 import org.springframework.stereotype.Service
@@ -35,14 +36,18 @@ class CategorizedItemCompositionService(
         return categorizedItemCompositionViewMapper.map(categorizedItem)
     }
 
-    fun addCategorizedItem(form: CategorizedItemCompositionForm) {
+    fun addCategorizedItem(form: CategorizedItemCompositionForm) : CategorizedItemCompositionView {
         val itemCategorized = categorizedItemCompositionFormMapper.map(form)
         itemCategorized.id = list.size.toLong() + 1
         list.add(itemCategorized)
+        return categorizedItemCompositionViewMapper.map(itemCategorized)
     }
 
-    fun updateCategorizedItem(form: CategorizedItemCompositionUpdateForm) {
-        utils.updateList(form, list)
+    fun updateCategorizedItem(form: CategorizedItemCompositionUpdateForm) : CategorizedItemCompositionView? {
+        val itemComposition = utils.updateList(form, list)
+        return itemComposition?.let {
+            categorizedItemCompositionViewMapper.map(itemComposition)
+        }
     }
 
     fun deleteItem(id: Long) {
