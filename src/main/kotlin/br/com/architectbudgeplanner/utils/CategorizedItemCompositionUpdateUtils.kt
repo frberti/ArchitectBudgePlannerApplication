@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class CategorizedItemCompositionUpdateUtils : Utils<CategorizedItemCompositionUpdateForm, CategorizedItemComposition> {
+class CategorizedItemCompositionUpdateUtils : UpdateUtils<CategorizedItemCompositionUpdateForm, CategorizedItemComposition> {
     override fun updateList(
         form: CategorizedItemCompositionUpdateForm,
         list: MutableList<CategorizedItemComposition>

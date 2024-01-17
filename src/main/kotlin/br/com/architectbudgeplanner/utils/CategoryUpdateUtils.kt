@@ -5,7 +5,7 @@ import br.com.architectbudgeplanner.model.Category
 import org.springframework.stereotype.Component
 
 @Component
-class CategoryUpdateUtils : Utils<CategoryUpdateForm, Category> {
+class CategoryUpdateUtils : UpdateUtils<CategoryUpdateForm, Category> {
 
     override fun updateList(form: CategoryUpdateForm, list: MutableList<Category>): Category? {
 
