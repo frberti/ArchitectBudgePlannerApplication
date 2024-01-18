@@ -1,4 +1,5 @@
 package br.com.architectbudgeplanner.exception
 
-class NotFoundException {
-}
+import java.lang.RuntimeException
+
+class NotFoundException (message: String?) : RuntimeException(message)

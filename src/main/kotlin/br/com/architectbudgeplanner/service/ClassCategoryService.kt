@@ -3,6 +3,8 @@ package br.com.architectbudgeplanner.service
 import br.com.architectbudgeplanner.dto.ClassCategoryForm
 import br.com.architectbudgeplanner.dto.ClassCategoryUpdateForm
 import br.com.architectbudgeplanner.dto.ClassCategoryView
+import br.com.architectbudgeplanner.exception.NotFoundException
+import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mocks.getClassesMock
 import br.com.architectbudgeplanner.model.ClassCategory
 import br.com.architectbudgeplanner.utils.ClassCategoryUpdateUtils
@@ -17,6 +19,7 @@ class ClassCategoryService(
     private val utils: ClassCategoryUpdateUtils
 ) {
 
+
     init {
         list = getClassesMock().toMutableList()
     }
@@ -30,7 +33,7 @@ class ClassCategoryService(
     fun getClassById(id: Long): ClassCategoryView {
         val classCategory = list.stream().filter {
             it.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)}
         return classCategoryViewMapper.map(classCategory)
     }
 
@@ -49,7 +52,7 @@ class ClassCategoryService(
     }
 
     fun deleteClass(id: Long) {
-        list.removeIf { it.id == id }
+        list.firstOrNull { it.id == id }?.let { list.remove(it) } ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
     }
 
 

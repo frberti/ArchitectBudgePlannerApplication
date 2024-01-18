@@ -1,7 +1,7 @@
 package br.com.architectbudgeplanner.exception.message
 
-class ErrorMessages {
+class ErrorMessage {
     companion object {
-        const val 
+        const val RESOURCE_NOT_FOUND = "Recurso não encontrado"
     }
 }

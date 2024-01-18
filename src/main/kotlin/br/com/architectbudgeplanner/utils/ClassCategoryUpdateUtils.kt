@@ -1,6 +1,8 @@
 package br.com.architectbudgeplanner.utils
 
 import br.com.architectbudgeplanner.dto.ClassCategoryUpdateForm
+import br.com.architectbudgeplanner.exception.NotFoundException
+import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.model.ClassCategory
 import org.springframework.stereotype.Component
 
@@ -9,9 +11,7 @@ class ClassCategoryUpdateUtils: UpdateUtils<ClassCategoryUpdateForm, ClassCatego
 
     override fun updateList(form: ClassCategoryUpdateForm, list: MutableList<ClassCategory>): ClassCategory? {
 
-        val classCategory = list.firstOrNull { it.id == form.id }
-
-        classCategory?.let {
+            list.firstOrNull { it.id == form.id }?.let {
             list.remove(it)
             val classUpdated = ClassCategory(
                 id = it.id,
@@ -20,8 +20,7 @@ class ClassCategoryUpdateUtils: UpdateUtils<ClassCategoryUpdateForm, ClassCatego
             )
             list.add(classUpdated)
             return classUpdated
-        }
-        return null
+        }?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
     }
 
 }
