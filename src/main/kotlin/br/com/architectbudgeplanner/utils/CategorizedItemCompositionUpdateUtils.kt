@@ -1,12 +1,15 @@
 package br.com.architectbudgeplanner.utils
 
 import br.com.architectbudgeplanner.dto.CategorizedItemCompositionUpdateForm
+import br.com.architectbudgeplanner.exception.NotFoundException
+import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.model.CategorizedItemComposition
 import org.springframework.stereotype.Component
 
 
 @Component
-class CategorizedItemCompositionUpdateUtils : UpdateUtils<CategorizedItemCompositionUpdateForm, CategorizedItemComposition> {
+class CategorizedItemCompositionUpdateUtils :
+    UpdateUtils<CategorizedItemCompositionUpdateForm, CategorizedItemComposition> {
     override fun updateList(
         form: CategorizedItemCompositionUpdateForm,
         list: MutableList<CategorizedItemComposition>
@@ -24,7 +27,6 @@ class CategorizedItemCompositionUpdateUtils : UpdateUtils<CategorizedItemComposi
             )
             list.add(itemUpdated)
             return itemUpdated
-        }
-        return null
+        } ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
     }
 }

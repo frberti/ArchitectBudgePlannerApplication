@@ -31,9 +31,9 @@ class ClassCategoryService(
     }
 
     fun getClassById(id: Long): ClassCategoryView {
-        val classCategory = list.stream().filter {
+        val classCategory = list.firstOrNull {
             it.id == id
-        }.findFirst().orElseThrow{NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)}
+        }?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
         return classCategoryViewMapper.map(classCategory)
     }
 

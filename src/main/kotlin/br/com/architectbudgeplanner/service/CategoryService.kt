@@ -3,6 +3,8 @@ package br.com.architectbudgeplanner.service
 import br.com.architectbudgeplanner.dto.CategoryForm
 import br.com.architectbudgeplanner.dto.CategoryUpdateForm
 import br.com.architectbudgeplanner.dto.CategoryView
+import br.com.architectbudgeplanner.exception.NotFoundException
+import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategoryFormMapper
 import br.com.architectbudgeplanner.mapper.CategoryViewMapper
 import br.com.architectbudgeplanner.mocks.getCategoriesMock
@@ -32,9 +34,9 @@ class CategoryService(
     }
 
     fun getCategoryById(id: Long): CategoryView {
-        val category = list.stream().filter { element ->
-            element.id == id
-        }.findFirst().get()
+        val category = list.firstOrNull {
+            it.id == id
+        } ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
 
         return categoryViewMapper.map(category)
     }
@@ -46,7 +48,7 @@ class CategoryService(
         return categoryViewMapper.map(category)
     }
 
-    fun updateCategory(form: CategoryUpdateForm) : CategoryView? {
+    fun updateCategory(form: CategoryUpdateForm): CategoryView? {
         val category = utils.updateList(form, list)
         return category?.let {
             categoryViewMapper.map(category)
@@ -54,6 +56,7 @@ class CategoryService(
     }
 
     fun deleteCategory(id: Long) {
-        list.removeIf { id == it.id}
+        list.firstOrNull { id == it.id }?.let { list.remove(it) }
+            ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
     }
 }

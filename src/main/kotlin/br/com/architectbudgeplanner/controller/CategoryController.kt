@@ -3,7 +3,6 @@ package br.com.architectbudgeplanner.controller
 import br.com.architectbudgeplanner.dto.CategoryForm
 import br.com.architectbudgeplanner.dto.CategoryUpdateForm
 import br.com.architectbudgeplanner.dto.CategoryView
-import br.com.architectbudgeplanner.model.Category
 import br.com.architectbudgeplanner.service.CategoryService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -29,14 +28,15 @@ class CategoryController(private val service: CategoryService) {
     @PostMapping
     fun addCategory(
         @RequestBody @Valid category: CategoryForm,
-        uriBuilder: UriComponentsBuilder) : ResponseEntity<CategoryView?> {
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<CategoryView?> {
         val categoryView = service.addCategory(category)
         val uri = uriBuilder.path("/categories/${categoryView.id}").build().toUri()
         return ResponseEntity.created(uri).body(categoryView)
     }
 
     @PutMapping
-    fun updateCategory(@RequestBody @Valid category: CategoryUpdateForm) : ResponseEntity<CategoryView?> {
+    fun updateCategory(@RequestBody @Valid category: CategoryUpdateForm): ResponseEntity<CategoryView?> {
         val categoryView = service.updateCategory(category)
         return ResponseEntity.ok(categoryView)
     }

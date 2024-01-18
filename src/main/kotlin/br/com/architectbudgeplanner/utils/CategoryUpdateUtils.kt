@@ -1,6 +1,8 @@
 package br.com.architectbudgeplanner.utils
 
 import br.com.architectbudgeplanner.dto.CategoryUpdateForm
+import br.com.architectbudgeplanner.exception.NotFoundException
+import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.model.Category
 import org.springframework.stereotype.Component
 
@@ -20,8 +22,7 @@ class CategoryUpdateUtils : UpdateUtils<CategoryUpdateForm, Category> {
             )
             list.add(categoryUpdated)
             return categoryUpdated
-        }
-        return null
+        } ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
 
     }
 
