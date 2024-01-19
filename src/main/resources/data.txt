@@ -1,0 +1,37 @@
+create table if not exists Category(
+    id int auto_increment primary key,
+    description varchar(255),
+    acronym varchar(255)
+);
+
+create table if not exists ClassCategory(
+    id int auto_increment primary key,
+    description varchar(255),
+    acronym varchar(255)
+);
+
+create table if not exists CategorizedItemComposition(
+    id int auto_increment primary key,
+    description varchar(255),
+    acronym varchar(255),
+    classCategory_id int,
+    category_id int,
+    foreign key (classCategory_id) references ClassCategory(id),
+    foreign key (category_id) references Category(id)
+);
+
+insert into Category(description, acronym) values('INSTALAÇÃO E INFRA DO CANTEIRO', 'CANT')
+insert into Category(description, acronym) values('PISOS/ REVESTIMENTOS/ CONCRETAGENS', 'PIS')
+insert into Category(description, acronym) values('BASICOS', 'BASI')
+insert into Category(description, acronym) values('ESTRUTURAIS', 'ESTR')
+
+insert into ClassCategory(description, acronym) values('MATERIAL', 'MAT')
+insert into ClassCategory(description, acronym) values('MÃO DE OBRA', 'MO')
+insert into ClassCategory(description, acronym) values('SERVIÇOS TÉCNICOS', 'TEC')
+insert into ClassCategory(description, acronym) values('SERVIÇOS ESPECIALIZADOS', 'ESP')
+
+insert into CategorizedItemComposition(description, acronym, classCategory_id, category_id) values('CARPINTEIRO', 'CARP', 2, 1)
+insert into CategorizedItemComposition(description, acronym, classCategory_id, category_id) values('SERVIÇOS DE SERRALHERIA', 'SERR', 2, 4)
+insert into CategorizedItemComposition(description, acronym, classCategory_id, category_id) values('SERVIÇOS DE ACABAMENTO EM PISOS', 'SERPI', 2, 2)
+insert into CategorizedItemComposition(description, acronym, classCategory_id, category_id) values('ALVENARIAS', 'ALV', 2, 1)
+
