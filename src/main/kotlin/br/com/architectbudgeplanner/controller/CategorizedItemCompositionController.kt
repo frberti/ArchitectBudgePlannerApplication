@@ -4,6 +4,7 @@ import br.com.architectbudgeplanner.dto.CategorizedItemCompositionForm
 import br.com.architectbudgeplanner.dto.CategorizedItemCompositionUpdateForm
 import br.com.architectbudgeplanner.dto.CategorizedItemCompositionView
 import br.com.architectbudgeplanner.service.CategorizedItemCompositionService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,6 +27,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     }
 
     @PostMapping
+    @Transactional
     fun addItem(
         @RequestBody @Valid form: CategorizedItemCompositionForm,
         uriBuilder: UriComponentsBuilder
@@ -36,6 +38,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     }
 
     @PutMapping
+    @Transactional
     fun updateItem(@RequestBody @Valid form: CategorizedItemCompositionUpdateForm): ResponseEntity<CategorizedItemCompositionView?> {
         val itemCompositionView = service.updateItem(form)
         return ResponseEntity.ok(itemCompositionView)

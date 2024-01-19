@@ -4,6 +4,7 @@ import br.com.architectbudgeplanner.dto.CategoryForm
 import br.com.architectbudgeplanner.dto.CategoryUpdateForm
 import br.com.architectbudgeplanner.dto.CategoryView
 import br.com.architectbudgeplanner.service.CategoryService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,6 +27,7 @@ class CategoryController(private val service: CategoryService) {
     }
 
     @PostMapping
+    @Transactional
     fun addCategory(
         @RequestBody @Valid category: CategoryForm,
         uriBuilder: UriComponentsBuilder
@@ -36,6 +38,7 @@ class CategoryController(private val service: CategoryService) {
     }
 
     @PutMapping
+    @Transactional
     fun updateCategory(@RequestBody @Valid category: CategoryUpdateForm): ResponseEntity<CategoryView?> {
         val categoryView = service.updateCategory(category)
         return ResponseEntity.ok(categoryView)

@@ -4,6 +4,7 @@ import br.com.architectbudgeplanner.dto.ClassCategoryForm
 import br.com.architectbudgeplanner.dto.ClassCategoryUpdateForm
 import br.com.architectbudgeplanner.dto.ClassCategoryView
 import br.com.architectbudgeplanner.service.ClassCategoryService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,6 +29,7 @@ class ClassCategoryController(
     }
 
     @PostMapping
+    @Transactional
     fun addClass(
         @RequestBody @Valid form: ClassCategoryForm,
         uriBuilder: UriComponentsBuilder
@@ -38,6 +40,7 @@ class ClassCategoryController(
     }
 
     @PutMapping
+    @Transactional
     fun updateClass(@RequestBody form: ClassCategoryUpdateForm): ResponseEntity<ClassCategoryView?> {
         val classView = service.updateClass(form)
         return ResponseEntity.ok(classView)

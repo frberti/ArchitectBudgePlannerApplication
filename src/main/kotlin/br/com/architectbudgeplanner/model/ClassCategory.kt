@@ -7,8 +7,8 @@ import jakarta.persistence.*
 data class ClassCategory (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
-    val description: String,
-    val acronym: String,
+    var description: String,
+    var acronym: String,
     @OneToMany(mappedBy = "classCategory")
     @JsonIgnore
     val categorizedItens: List<CategorizedItemComposition>? = ArrayList()

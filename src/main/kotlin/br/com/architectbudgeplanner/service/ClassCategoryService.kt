@@ -37,6 +37,8 @@ class ClassCategoryService(
     fun updateClass(form: ClassCategoryUpdateForm): ClassCategoryView? {
         val classCategory =
             repository.findById(form.id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }
+            classCategory.description = form.description
+            classCategory.acronym = form.acronym
         return classCategoryViewMapper.map(classCategory)
     }
 
