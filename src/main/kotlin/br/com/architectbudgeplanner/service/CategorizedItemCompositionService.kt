@@ -7,53 +7,43 @@ import br.com.architectbudgeplanner.exception.NotFoundException
 import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionFormMapper
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionViewMapper
-import br.com.architectbudgeplanner.mocks.getItensMock
-import br.com.architectbudgeplanner.model.CategorizedItemComposition
-import br.com.architectbudgeplanner.utils.CategorizedItemCompositionUpdateUtils
+import br.com.architectbudgeplanner.repository.CategorizedItemCompositionRepository
 import org.springframework.stereotype.Service
 
 @Service
 class CategorizedItemCompositionService(
-    private var list: MutableList<CategorizedItemComposition>,
+    private val repository: CategorizedItemCompositionRepository,
     private val categorizedItemCompositionViewMapper: CategorizedItemCompositionViewMapper,
     private val categorizedItemCompositionFormMapper: CategorizedItemCompositionFormMapper,
-    private val utils: CategorizedItemCompositionUpdateUtils
 ) {
 
-
-    init {
-        list = getItensMock().toMutableList()
-    }
-
     fun getItems(): List<CategorizedItemCompositionView> {
-        return list.map {
+        return repository.findAll().map {
             categorizedItemCompositionViewMapper.map(it)
         }
     }
 
     fun getItemById(id: Long): CategorizedItemCompositionView {
-        val categorizedItem = list.firstOrNull {
-            id == it.id
-        } ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
+        val categorizedItem = repository.findById(id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }
         return categorizedItemCompositionViewMapper.map(categorizedItem)
     }
 
-    fun addCategorizedItem(form: CategorizedItemCompositionForm): CategorizedItemCompositionView {
-        val itemCategorized = categorizedItemCompositionFormMapper.map(form)
-        itemCategorized.id = list.size.toLong() + 1
-        list.add(itemCategorized)
-        return categorizedItemCompositionViewMapper.map(itemCategorized)
+    fun addItem(form: CategorizedItemCompositionForm): CategorizedItemCompositionView {
+        val item = categorizedItemCompositionFormMapper.map(form)
+        repository.save(item)
+        return categorizedItemCompositionViewMapper.map(item)
     }
 
-    fun updateCategorizedItem(form: CategorizedItemCompositionUpdateForm): CategorizedItemCompositionView? {
-        val itemComposition = utils.updateList(form, list)
-        return itemComposition?.let {
-            categorizedItemCompositionViewMapper.map(itemComposition)
-        }
+    fun updateItem(form: CategorizedItemCompositionUpdateForm): CategorizedItemCompositionView? {
+        val item = repository.findById(form.id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }
+        item.description = form.description
+        item.acronym = form.acronym
+        return categorizedItemCompositionViewMapper.map(item)
     }
 
     fun deleteItem(id: Long) {
-        list.firstOrNull { it.id == id }?.let { list.remove(it) }
-            ?: throw NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND)
+        repository.existsById(id).takeIf { it }?.run { repository.deleteById(id) } ?: throw NotFoundException(
+            ErrorMessage.RESOURCE_NOT_FOUND
+        )
     }
 }

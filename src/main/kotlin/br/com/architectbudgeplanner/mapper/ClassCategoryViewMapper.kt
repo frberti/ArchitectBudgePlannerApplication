@@ -1,4 +1,4 @@
-package br.com.architectbudgeplanner.service
+package br.com.architectbudgeplanner.mapper
 
 import br.com.architectbudgeplanner.dto.ClassCategoryView
 import br.com.architectbudgeplanner.mapper.Mapper

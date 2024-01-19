@@ -30,14 +30,14 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
         @RequestBody @Valid form: CategorizedItemCompositionForm,
         uriBuilder: UriComponentsBuilder
     ): ResponseEntity<CategorizedItemCompositionView?> {
-        val itemCompositionView = service.addCategorizedItem(form)
+        val itemCompositionView = service.addItem(form)
         val uri = uriBuilder.path("/item-composition/${itemCompositionView.id}").build().toUri()
         return ResponseEntity.created(uri).body(itemCompositionView)
     }
 
     @PutMapping
     fun updateItem(@RequestBody @Valid form: CategorizedItemCompositionUpdateForm): ResponseEntity<CategorizedItemCompositionView?> {
-        val itemCompositionView = service.updateCategorizedItem(form)
+        val itemCompositionView = service.updateItem(form)
         return ResponseEntity.ok(itemCompositionView)
     }
 
