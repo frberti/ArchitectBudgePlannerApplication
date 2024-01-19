@@ -4,10 +4,10 @@ import java.time.LocalDateTime
 
 data class ErrorView (
 
-    private val timeStamp: LocalDateTime = LocalDateTime.now(),
-    private val status: Int,
-    private val error: String,
-    private val message: String?,
-    private val path: String
+    val timeStamp: LocalDateTime = LocalDateTime.now(),
+    val status: Int,
+    val error: String,
+    val message: String?,
+    val path: String
 
 )
