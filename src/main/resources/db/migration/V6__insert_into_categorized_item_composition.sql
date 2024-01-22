@@ -1,0 +1,1 @@
+insert into categorized_item_composition(description, acronym, category_id, class_category_id) values('CATEGORIZED ITEM TEST', 'CATGO', 1, 1)

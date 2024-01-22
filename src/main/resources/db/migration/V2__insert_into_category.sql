@@ -1,0 +1,1 @@
+insert into category(description, acronym) values('CATEGORY TEST', 'CATES')

@@ -1,0 +1,1 @@
+insert into class_category(description, acronym) values('CLASS TEST', 'CLAST')
