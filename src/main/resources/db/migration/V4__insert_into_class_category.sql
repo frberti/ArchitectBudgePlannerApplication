@@ -1,1 +1,1 @@
-insert into class_category(description, acronym) values('CLASS TEST', 'CLAST')
+insert into class_category(description, acronym) values('MAO DE OBRA', 'MO')
