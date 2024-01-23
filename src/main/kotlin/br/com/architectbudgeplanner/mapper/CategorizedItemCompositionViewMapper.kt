@@ -12,6 +12,7 @@ class CategorizedItemCompositionViewMapper: Mapper<CategorizedItemComposition, C
             id = t.id,
             description = t.description,
             acronym = t.acronym,
+            createdAt = t.createdAt,
             classCategory = t.classCategory,
             category = t.category
         )

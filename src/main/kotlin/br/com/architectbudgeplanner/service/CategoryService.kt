@@ -7,12 +7,8 @@ import br.com.architectbudgeplanner.exception.NotFoundException
 import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategoryFormMapper
 import br.com.architectbudgeplanner.mapper.CategoryViewMapper
-import br.com.architectbudgeplanner.mocks.getCategoriesMock
-import br.com.architectbudgeplanner.model.Category
 import br.com.architectbudgeplanner.repository.CategoryRepository
-import br.com.architectbudgeplanner.utils.CategoryUpdateUtils
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class CategoryService(

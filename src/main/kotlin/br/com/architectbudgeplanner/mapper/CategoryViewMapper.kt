@@ -12,6 +12,7 @@ class CategoryViewMapper: Mapper<Category, CategoryView> {
             id = t.id,
             description = t.description,
             acronym = t.acronym,
+            createdAt = t.createdAt,
             categorizedItens = t.categorizedItens
         )
     }
