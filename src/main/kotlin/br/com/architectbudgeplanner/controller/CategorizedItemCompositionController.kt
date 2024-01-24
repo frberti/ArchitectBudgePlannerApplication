@@ -6,6 +6,9 @@ import br.com.architectbudgeplanner.dto.CategorizedItemCompositionView
 import br.com.architectbudgeplanner.service.CategorizedItemCompositionService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,8 +20,12 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
 
 
     @GetMapping
-    fun getItems(): List<CategorizedItemCompositionView> {
-        return service.getItems()
+    fun getItems(
+        @RequestParam(required = false) description: String?,
+        @RequestParam(required = false) acronym: String?,
+        @PageableDefault(size = 10) pageable: Pageable
+    ): Page<CategorizedItemCompositionView> {
+        return service.getItems(description, acronym, pageable)
     }
 
     @GetMapping("/{id}")

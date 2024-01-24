@@ -6,6 +6,9 @@ import br.com.architectbudgeplanner.dto.CategoryView
 import br.com.architectbudgeplanner.service.CategoryService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -19,8 +22,9 @@ class CategoryController(private val service: CategoryService) {
     @GetMapping
     fun getCategories(
         @RequestParam(required = false) description: String?,
-        @RequestParam(required = false) acronym: String?): List<CategoryView> {
-        return service.getCategories(description, acronym)
+        @RequestParam(required = false) acronym: String?,
+        @PageableDefault(size = 10) pageable: Pageable): Page<CategoryView> {
+        return service.getCategories(description, acronym, pageable)
     }
 
     @GetMapping("/{id}")

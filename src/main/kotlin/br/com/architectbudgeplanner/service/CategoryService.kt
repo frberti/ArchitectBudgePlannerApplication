@@ -8,6 +8,8 @@ import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategoryFormMapper
 import br.com.architectbudgeplanner.mapper.CategoryViewMapper
 import br.com.architectbudgeplanner.repository.CategoryRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,12 +20,15 @@ class CategoryService(
 
 ) {
 
-    fun getCategories(description: String?, acronym: String?): List<CategoryView> =
-        if (description == null && acronym == null) {
-            repository.findAll()
-        } else {
-            repository.findByParams(description, acronym)
-        }.map(categoryViewMapper::map)
+    fun getCategories(
+        description: String?,
+        acronym: String?,
+        pageable: Pageable
+    ): Page<CategoryView> = if (description == null && acronym == null) {
+        repository.findAll(pageable)
+    } else {
+        repository.findByParams(description, acronym, pageable)
+    }.map(categoryViewMapper::map)
 
     fun getCategoryById(id: Long): CategoryView {
         val category = repository.findById(id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }

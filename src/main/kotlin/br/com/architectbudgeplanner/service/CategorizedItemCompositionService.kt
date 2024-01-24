@@ -8,6 +8,8 @@ import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionFormMapper
 import br.com.architectbudgeplanner.mapper.CategorizedItemCompositionViewMapper
 import br.com.architectbudgeplanner.repository.CategorizedItemCompositionRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,11 +19,16 @@ class CategorizedItemCompositionService(
     private val categorizedItemCompositionFormMapper: CategorizedItemCompositionFormMapper,
 ) {
 
-    fun getItems(): List<CategorizedItemCompositionView> {
-        return repository.findAll().map {
-            categorizedItemCompositionViewMapper.map(it)
-        }
-    }
+    fun getItems(
+        description: String?,
+        acronym: String?,
+        pageable: Pageable
+    ): Page<CategorizedItemCompositionView> = if (description == null && acronym == null) {
+        repository.findAll(pageable)
+    } else {
+        repository.findByParams(description, acronym, pageable)
+    }.map(categorizedItemCompositionViewMapper::map)
+
 
     fun getItemById(id: Long): CategorizedItemCompositionView {
         val categorizedItem = repository.findById(id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }

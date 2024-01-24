@@ -6,6 +6,9 @@ import br.com.architectbudgeplanner.dto.ClassCategoryView
 import br.com.architectbudgeplanner.service.ClassCategoryService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -19,8 +22,12 @@ class ClassCategoryController(
 
 
     @GetMapping
-    fun getClasses(): List<ClassCategoryView> {
-        return service.getClasses()
+    fun getClasses(
+        @RequestParam(required = false) description: String?,
+        @RequestParam(required = false) acronym: String?,
+        @PageableDefault(size = 10) pageable: Pageable
+        ): Page<ClassCategoryView> {
+        return service.getClasses(description, acronym, pageable)
     }
 
     @GetMapping("/{id}")
