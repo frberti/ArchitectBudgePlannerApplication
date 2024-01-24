@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,8 +26,8 @@ class ClassCategoryController(
     fun getClasses(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
-        @PageableDefault(size = 10) pageable: Pageable
-        ): Page<ClassCategoryView> {
+        @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): Page<ClassCategoryView> {
         return service.getClasses(description, acronym, pageable)
     }
 
