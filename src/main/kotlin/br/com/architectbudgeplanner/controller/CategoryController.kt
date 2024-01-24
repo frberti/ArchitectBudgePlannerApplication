@@ -17,8 +17,10 @@ class CategoryController(private val service: CategoryService) {
 
 
     @GetMapping
-    fun getCategories(): List<CategoryView> {
-        return service.getCategories()
+    fun getCategories(
+        @RequestParam(required = false) description: String?,
+        @RequestParam(required = false) acronym: String?): List<CategoryView> {
+        return service.getCategories(description, acronym)
     }
 
     @GetMapping("/{id}")

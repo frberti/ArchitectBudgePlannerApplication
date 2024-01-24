@@ -18,11 +18,12 @@ class CategoryService(
 
 ) {
 
-    fun getCategories(): List<CategoryView> {
-        return repository.findAll().map {
-            categoryViewMapper.map(it)
-        }
-    }
+    fun getCategories(description: String?, acronym: String?): List<CategoryView> =
+        if (description == null && acronym == null) {
+            repository.findAll()
+        } else {
+            repository.findByParams(description, acronym)
+        }.map(categoryViewMapper::map)
 
     fun getCategoryById(id: Long): CategoryView {
         val category = repository.findById(id).orElseThrow { NotFoundException(ErrorMessage.RESOURCE_NOT_FOUND) }
