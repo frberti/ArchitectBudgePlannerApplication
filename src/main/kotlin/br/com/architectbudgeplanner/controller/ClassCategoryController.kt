@@ -6,6 +6,8 @@ import br.com.architectbudgeplanner.dto.ClassCategoryView
 import br.com.architectbudgeplanner.service.ClassCategoryService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -23,6 +25,7 @@ class ClassCategoryController(
 
 
     @GetMapping
+    @Cacheable("classes")
     fun getClasses(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
@@ -38,6 +41,7 @@ class ClassCategoryController(
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["classes"], allEntries = true)
     fun addClass(
         @RequestBody @Valid form: ClassCategoryForm,
         uriBuilder: UriComponentsBuilder
@@ -49,12 +53,14 @@ class ClassCategoryController(
 
     @PutMapping
     @Transactional
+    @CacheEvict(value = ["classes"], allEntries = true)
     fun updateClass(@RequestBody form: ClassCategoryUpdateForm): ResponseEntity<ClassCategoryView?> {
         val classView = service.updateClass(form)
         return ResponseEntity.ok(classView)
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = ["classes"], allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteClass(@PathVariable id: Long) {
         service.deleteClass(id)

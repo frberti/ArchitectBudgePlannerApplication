@@ -6,6 +6,8 @@ import br.com.architectbudgeplanner.dto.CategorizedItemCompositionView
 import br.com.architectbudgeplanner.service.CategorizedItemCompositionService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -21,6 +23,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
 
 
     @GetMapping
+    @Cacheable("items")
     fun getItems(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
@@ -35,6 +38,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     }
 
     @PostMapping
+    @CacheEvict(value = ["items"], allEntries = true)
     @Transactional
     fun addItem(
         @RequestBody @Valid form: CategorizedItemCompositionForm,
@@ -46,6 +50,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     }
 
     @PutMapping
+    @CacheEvict(value = ["items"], allEntries = true)
     @Transactional
     fun updateItem(@RequestBody @Valid form: CategorizedItemCompositionUpdateForm): ResponseEntity<CategorizedItemCompositionView?> {
         val itemCompositionView = service.updateItem(form)
@@ -53,6 +58,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = ["items"], allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteItem(@PathVariable id: Long) {
         service.deleteItem(id)
