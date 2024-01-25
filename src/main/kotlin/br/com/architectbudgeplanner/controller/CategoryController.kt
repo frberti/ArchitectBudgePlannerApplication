@@ -27,7 +27,7 @@ class CategoryController(private val service: CategoryService) {
     fun getCategories(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
-        @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+        @PageableDefault(size = 20, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
     ): Page<CategoryView> {
         return service.getCategories(description, acronym, pageable)
     }

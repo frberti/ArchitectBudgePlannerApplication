@@ -29,7 +29,7 @@ class ClassCategoryController(
     fun getClasses(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
-        @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+        @PageableDefault(size = 20, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
     ): Page<ClassCategoryView> {
         return service.getClasses(description, acronym, pageable)
     }

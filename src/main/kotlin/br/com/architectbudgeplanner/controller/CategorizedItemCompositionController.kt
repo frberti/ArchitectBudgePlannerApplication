@@ -27,7 +27,7 @@ class CategorizedItemCompositionController(private val service: CategorizedItemC
     fun getItems(
         @RequestParam(required = false) description: String?,
         @RequestParam(required = false) acronym: String?,
-        @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
+        @PageableDefault(size = 20, sort = ["createdAt"], direction = Sort.Direction.ASC) pageable: Pageable
     ): Page<CategorizedItemCompositionView> {
         return service.getItems(description, acronym, pageable)
     }
