@@ -1,7 +1,6 @@
 package br.com.architectbudgeplanner.mapper
 
 import br.com.architectbudgeplanner.dto.CategoryForm
-import br.com.architectbudgeplanner.dto.CategoryView
 import br.com.architectbudgeplanner.model.Category
 import org.springframework.stereotype.Component
 
