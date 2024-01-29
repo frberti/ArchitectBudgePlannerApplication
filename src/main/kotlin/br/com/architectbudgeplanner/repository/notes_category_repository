@@ -1,0 +1,19 @@
+Método equivalente ao
+
+-> findByDescriptionContainingIgnoreCaseOrAcronymContainingIgnoreCase(),
+
+que utiliza o padrão de Query JPQL para receber um parâmetro com seu valor parcial ou completo, caseSensitive, não obrigatório
+
+
+@Query(
+        "SELECT c " +
+                "FROM Category c " +
+                "WHERE " +
+                "(:description IS NULL OR LOWER(c.description) LIKE LOWER(CONCAT('%', :description, '%'))) " +
+                "AND " +
+                "(:acronym IS NULL OR LOWER(c.acronym) LIKE LOWER(CONCAT('%', :acronym, '%')))")
+    fun findByParams(
+        @Param("description") description: String?,
+        @Param("acronym") acronym: String?,
+        pageable: Pageable
+    ): Page<Category>

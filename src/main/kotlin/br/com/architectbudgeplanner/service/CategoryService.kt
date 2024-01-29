@@ -7,6 +7,7 @@ import br.com.architectbudgeplanner.exception.NotFoundException
 import br.com.architectbudgeplanner.exception.message.ErrorMessage
 import br.com.architectbudgeplanner.mapper.CategoryFormMapper
 import br.com.architectbudgeplanner.mapper.CategoryViewMapper
+import br.com.architectbudgeplanner.model.Category
 import br.com.architectbudgeplanner.repository.CategoryRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -27,7 +28,7 @@ class CategoryService(
     ): Page<CategoryView> = if (description == null && acronym == null) {
         repository.findAll(pageable)
     } else {
-        repository.findByParams(description, acronym, pageable)
+        findByParams(description, acronym, pageable)
     }.map(categoryViewMapper::map)
 
     fun getCategoryById(id: Long): CategoryView {
@@ -51,6 +52,14 @@ class CategoryService(
     fun deleteCategory(id: Long) {
         repository.existsById(id).takeIf { it }?.run { repository.deleteById(id) } ?: throw NotFoundException(
             ErrorMessage.RESOURCE_NOT_FOUND
+        )
+    }
+
+    fun findByParams(description: String?, acronym: String?, pageable: Pageable): Page<Category> {
+        return repository.findByDescriptionContainingIgnoreCaseOrAcronymContainingIgnoreCase(
+            description,
+            acronym,
+            pageable
         )
     }
 }
