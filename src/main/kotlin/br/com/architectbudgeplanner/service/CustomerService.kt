@@ -2,44 +2,41 @@ package br.com.architectbudgeplanner.service
 
 import br.com.architectbudgeplanner.config.UserDetail
 import br.com.architectbudgeplanner.dto.CostumerForm
-import br.com.architectbudgeplanner.dto.CostumerView
+import br.com.architectbudgeplanner.dto.CustomerView
 import br.com.architectbudgeplanner.exception.NotFoundException
 import br.com.architectbudgeplanner.exception.message.ErrorMessage
-import br.com.architectbudgeplanner.mapper.CostumerFormMapper
-import br.com.architectbudgeplanner.mapper.CostumerViewMapper
-import br.com.architectbudgeplanner.repository.CostumerRepository
+import br.com.architectbudgeplanner.mapper.CustomerFormMapper
+import br.com.architectbudgeplanner.mapper.CustomerViewMapper
+import br.com.architectbudgeplanner.repository.CustomerRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class CostumerService(
-    private val repository: CostumerRepository,
-    private val costumerFormMapper: CostumerFormMapper,
-    private val costumerViewMapper: CostumerViewMapper,
-    private val passwordEncoder: PasswordEncoder
+class CustomerService(
+    private val repository: CustomerRepository,
+    private val customerFormMapper: CustomerFormMapper,
+    private val customerViewMapper: CustomerViewMapper
 
 ) : UserDetailsService {
 
-    fun getCostumers(name: String?, email: String?, pageable: Pageable): Page<CostumerView> =
+    fun getCustomers(name: String?, email: String?, pageable: Pageable): Page<CustomerView> =
         if (name == null && email == null) {
             repository.findAll(pageable)
         } else {
             repository.findByParams(name, email, pageable)
-        }.map(costumerViewMapper::map)
+        }.map(customerViewMapper::map)
 
-    fun getCostumerById(id: Long): CostumerView {
+    fun getCustomerById(id: Long): CustomerView {
         val user = repository.getReferenceById(id)
-        return costumerViewMapper.map(user)
+        return customerViewMapper.map(user)
     }
 
-    //TODO - CORRIGIR UNAUTHORIZED AO FAZER POST
-    fun addCostumer(form: CostumerForm): CostumerView {
-        val user = costumerFormMapper.map(form)
+    fun addCostumer(form: CostumerForm): CustomerView {
+        val user = customerFormMapper.map(form)
         repository.save(user)
-        return costumerViewMapper.map(user)
+        return customerViewMapper.map(user)
     }
 
     override fun loadUserByUsername(username: String?): UserDetail {

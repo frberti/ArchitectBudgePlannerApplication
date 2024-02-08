@@ -1,12 +1,16 @@
 package br.com.architectbudgeplanner.config
 
+import br.com.architectbudgeplanner.config.RolesPermissions.Companion.READ
+import br.com.architectbudgeplanner.config.RolesPermissions.Companion.WRITE
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.Customizer
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
@@ -14,18 +18,41 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfiguration {
 
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.authorizeHttpRequests {
-            it.anyRequest().authenticated()
-        }.sessionManagement {
-            it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        }.formLogin {
-            it.disable()
-        }.httpBasic(Customizer.withDefaults()).build()
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.invoke {
+            csrf { disable() }
+            authorizeRequests {
+
+                authorize(HttpMethod.GET,"/item-composition", hasAuthority(READ))
+                authorize(HttpMethod.POST,"/item-composition", hasAuthority(WRITE))
+                authorize(HttpMethod.PUT,"/item-composition", hasAuthority(WRITE))
+                authorize(HttpMethod.DELETE,"/item-composition", hasAuthority(WRITE))
+
+                authorize(HttpMethod.GET,"/classes", hasAuthority(READ))
+                authorize(HttpMethod.POST,"/classes", hasAuthority(WRITE))
+                authorize(HttpMethod.PUT,"/classes", hasAuthority(WRITE))
+                authorize(HttpMethod.DELETE,"/classes", hasAuthority(WRITE))
+
+                authorize(HttpMethod.GET,"/categories", hasAuthority(READ))
+                authorize(HttpMethod.POST,"/categories", hasAuthority(WRITE))
+                authorize(HttpMethod.PUT,"/categories", hasAuthority(WRITE))
+                authorize(HttpMethod.DELETE,"/categories", hasAuthority(WRITE))
+
+                authorize(HttpMethod.GET,"/customers", hasAuthority(READ))
+                authorize(HttpMethod.POST,"/customers", hasAuthority(WRITE))
+
+                authorize(anyRequest, authenticated)
+            }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+            }
+            headers { frameOptions { disable() } }
+            httpBasic { }
+        }
+        return http.build()
     }
 
     @Bean
-    fun encoder(): BCryptPasswordEncoder? {
-        return BCryptPasswordEncoder()
-    }
+    fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
+
 }

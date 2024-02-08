@@ -1,20 +1,20 @@
 package br.com.architectbudgeplanner.repository
 
-import br.com.architectbudgeplanner.model.Costumer
+import br.com.architectbudgeplanner.model.Customer
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
-interface CostumerRepository : JpaRepository<Costumer, Long> {
+interface CustomerRepository : JpaRepository<Customer, Long> {
 
 
-    fun findByEmail(username: String?): Costumer?
+    fun findByEmail(username: String?): Customer?
 
     @Query(
         "SELECT c " +
-                "FROM Costumer c " +
+                "FROM Customer c " +
                 "WHERE " +
                 "(:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
                 "AND " +
@@ -24,7 +24,7 @@ interface CostumerRepository : JpaRepository<Costumer, Long> {
         @Param("name") name: String?,
         @Param("email") email: String?,
         pageable: Pageable
-    ): Page<Costumer>
+    ): Page<Customer>
 
 
 }

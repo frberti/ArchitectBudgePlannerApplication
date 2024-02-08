@@ -8,9 +8,8 @@ data class CostumerForm(
     @field:Size(min = 5, max = 150)
     val name: String,
     @field:NotEmpty
-    @field:Size(min = 3, max = 5)
     val email: String,
     @field:NotEmpty
-    @field:Size(min = 3, max = 5)
+    @field:Size(min = 5, max = 10)
     val password: String
 )
