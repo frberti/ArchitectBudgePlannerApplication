@@ -11,13 +11,15 @@ import br.com.architectbudgeplanner.repository.CustomerRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class CustomerService(
     private val repository: CustomerRepository,
     private val customerFormMapper: CustomerFormMapper,
-    private val customerViewMapper: CustomerViewMapper
+    private val customerViewMapper: CustomerViewMapper,
+    private val passwordEncoder: PasswordEncoder
 
 ) : UserDetailsService {
 
@@ -34,7 +36,8 @@ class CustomerService(
     }
 
     fun addCostumer(form: CostumerForm): CustomerView {
-        val user = customerFormMapper.map(form)
+        val encryptedPassword = passwordEncoder.encode(form.password)
+        val user = customerFormMapper.map(form.copy(password = encryptedPassword))
         repository.save(user)
         return customerViewMapper.map(user)
     }

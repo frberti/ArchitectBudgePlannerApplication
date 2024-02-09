@@ -23,22 +23,18 @@ class SecurityConfiguration {
             csrf { disable() }
             authorizeRequests {
 
-                authorize(HttpMethod.GET,"/item-composition", hasAuthority(READ))
                 authorize(HttpMethod.POST,"/item-composition", hasAuthority(WRITE))
                 authorize(HttpMethod.PUT,"/item-composition", hasAuthority(WRITE))
                 authorize(HttpMethod.DELETE,"/item-composition", hasAuthority(WRITE))
 
-                authorize(HttpMethod.GET,"/classes", hasAuthority(READ))
                 authorize(HttpMethod.POST,"/classes", hasAuthority(WRITE))
                 authorize(HttpMethod.PUT,"/classes", hasAuthority(WRITE))
                 authorize(HttpMethod.DELETE,"/classes", hasAuthority(WRITE))
 
-                authorize(HttpMethod.GET,"/categories", hasAuthority(READ))
                 authorize(HttpMethod.POST,"/categories", hasAuthority(WRITE))
                 authorize(HttpMethod.PUT,"/categories", hasAuthority(WRITE))
                 authorize(HttpMethod.DELETE,"/categories", hasAuthority(WRITE))
 
-                authorize(HttpMethod.GET,"/customers", hasAuthority(READ))
                 authorize(HttpMethod.POST,"/customers", hasAuthority(WRITE))
 
                 authorize(anyRequest, authenticated)
