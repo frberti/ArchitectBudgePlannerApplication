@@ -1,33 +1,33 @@
 package br.com.architectbudgeplanner.config
 
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.Keys
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.stereotype.Component
 import java.util.*
 
+@Component
 data class JWTUtil(
     private val expiration: Long = 60000
 ) {
     @Value("\${jwt.secret}")
-    private lateinit var secret: String
-    private val key = Keys.hmacShaKeyFor(secret.toByteArray())
+    private var secret: String = "secret"
+    private val key = Algorithm.HMAC256(secret.toByteArray())
 
     fun generateToken(username: String): String? {
-        return Jwts.builder()
-            .subject(username)
-            .expiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(key)
-            .compact()
+        return JWT.create()
+            .withSubject(username)
+            .withExpiresAt(Date(System.currentTimeMillis() + expiration))
+            .sign(key)
     }
 
     fun isValid(jwt: String?): Boolean {
         return try {
-            Jwts.parser()
-                .setSigningKey(key)
+            JWT.require(key)
                 .build()
-                .parseClaimsJws(jwt)
+                .verify(jwt)
             true
         } catch (e: Exception) {
             false
@@ -35,11 +35,9 @@ data class JWTUtil(
     }
 
     fun getAuthentication(jwt: String?): Authentication {
-        val username = Jwts.parser()
-            .setSigningKey(key)
+        val username = JWT.require(key)
             .build()
-            .parseClaimsJws(jwt)
-            .body
+            .verify(jwt)
             .subject
 
         return UsernamePasswordAuthenticationToken(username, null, null)
